@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PAASD App</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>
+/* Layout: phone-shaped app centered on desktop, full-bleed on phones. Greeting header, 4 tabs, card-based screens. */
+:root{
+  --bg:#FFFFFF; --surface:#FFFFFF; --card:#FFFFFF; --soft:#DDEEEA; --ink:#12252A; --muted:#56686D; --line:#D5E4E1;
+  --teal:#17736E; --teal-fill:#1F8A84; --on-teal:#FFFFFF; --deep:#0B3038; --deep-2:#134550; --on-deep:#F2F7F6; --on-deep-muted:#B5D2CE;
+  --coral:#F08A5D; --coral-ink:#B24A1F; --coral-bg:#FCE3D6; --ok:#1B7A4B; --ok-bg:#DDF1E5;
+  --shadow:0 1px 2px rgba(11,48,56,.06),0 8px 24px rgba(11,48,56,.07);
+  --font-d:'Space Grotesk',system-ui,sans-serif; --font-b:'Inter',system-ui,sans-serif;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-b);font-size:16px;line-height:1.45;display:flex;justify-content:center;align-items:center;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+p,h1,h2,h3{margin:0}
+.phone{width:100%;max-width:404px;height:min(100%,840px);background:var(--surface);border-radius:40px;border:1px solid var(--line);box-shadow:0 30px 70px rgba(11,48,56,.16);display:flex;flex-direction:column;overflow:hidden;min-width:0}
+@media (max-width:480px){body{padding-left:0;padding-right:0;align-items:stretch}.phone{max-width:none;height:100%;border-radius:0;border:0;box-shadow:none}}
+
+/* header */
+.top{display:flex;align-items:center;gap:12px;padding:18px 20px 10px}
+.top .hello{flex:1;min-width:0}
+.top .hello small{display:block;font-size:13px;color:var(--muted)}
+.top .hello b{font-family:var(--font-d);font-size:19px;font-weight:700}
+.me{width:44px;height:44px;border-radius:50%;background:var(--teal-fill);color:var(--on-teal);display:grid;place-items:center;font-family:var(--font-d);font-weight:700;flex:none}
+.bell{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;position:relative;flex:none}
+.bell::after{content:"";position:absolute;top:10px;right:11px;width:9px;height:9px;border-radius:50%;background:var(--coral);border:2px solid var(--card)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:0 20px 6px;padding:4px;background:var(--soft);border-radius:14px}
+.seg button{border:0;background:transparent;border-radius:10px;padding:9px 0;font-size:14px;font-weight:600;color:var(--muted);min-height:40px}
+.seg button[aria-pressed=true]{background:var(--card);color:var(--teal);box-shadow:var(--shadow)}
+
+main{flex:1;overflow-y:auto;padding:12px 20px 24px;display:flex;flex-direction:column;gap:18px;min-width:0}
+@media (prefers-reduced-motion:no-preference){main>*{animation:rise .28s ease both}}
+@keyframes rise{from{transform:translateY(8px);opacity:.4}to{transform:none;opacity:1}}
+h1{font-family:var(--font-d);font-size:25px;line-height:1.15;text-wrap:balance}
+h2{font-family:var(--font-d);font-size:17px}
+.muted{color:var(--muted);font-size:14px}
+.secthead{display:flex;justify-content:space-between;align-items:baseline}
+.link{background:none;border:0;padding:6px 0;color:var(--teal);font-weight:600;font-size:14px}
+svg.ic{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--deep);color:var(--on-deep);border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow)}
+.hero::before{content:"";position:absolute;right:-60px;top:-70px;width:200px;height:200px;border-radius:50%;background:var(--deep-2)}
+.hero::after{content:"";position:absolute;right:26px;top:26px;width:18px;height:18px;border-radius:50%;background:var(--coral)}
+.hero>*{position:relative}
+.hero .lbl{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--on-deep-muted)}
+.hero h2{font-size:24px;color:var(--on-deep)}
+.hero .muted{color:var(--on-deep-muted)}
+.row{display:flex;gap:12px;align-items:center;min-width:0}
+.grow{flex:1;min-width:0}
+.avatar{flex:none;width:48px;height:48px;border-radius:16px;background:var(--soft);color:var(--teal);display:grid;place-items:center;font-family:var(--font-d);font-weight:700}
+.hero .avatar{background:var(--coral);color:#0B3038}
+.btn{border:0;border-radius:14px;padding:13px 16px;font-weight:600;background:var(--teal-fill);color:var(--on-teal);min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:var(--card);border:1px solid var(--line);color:var(--ink)}
+.btn.onhero{background:rgba(255,255,255,.12);color:var(--on-deep)}
+.btn.coral{background:var(--coral);color:#0B3038}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btns{display:flex;gap:10px}.btns .btn{flex:1}
+
+/* quick actions */
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.quick button{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:12px 4px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12.5px;font-weight:600;min-height:76px}
+.quick span.i{width:36px;height:36px;border-radius:12px;background:var(--soft);color:var(--teal);display:grid;place-items:center}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:3px 10px;font-size:12.5px;font-weight:600;background:var(--ok-bg);color:var(--ok);white-space:nowrap}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.chip.warn{background:var(--coral-bg);color:var(--coral-ink)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{gap:6px}
+.stat b{font-family:var(--font-d);font-size:24px;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat .chip{align-self:flex-start}
+
+/* pros */
+.hscroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.hscroll::-webkit-scrollbar{display:none}
+.pro{flex:none;width:150px;align-items:flex-start;text-align:left}
+.pro b{font-size:15px;line-height:1.2}
+.star{color:var(--coral-ink);font-weight:600;font-size:13px}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px;min-height:64px}
+.opt[aria-pressed=true]{border-color:var(--teal-fill);background:var(--soft);box-shadow:inset 0 0 0 1px var(--teal-fill)}
+.radio{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--line)}
+.opt[aria-pressed=true] .radio{border:7px solid var(--teal-fill)}
+.filters{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.filters button{flex:none;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:8px 14px;font-size:14px;font-weight:500;min-height:40px}
+.filters button[aria-pressed=true]{background:var(--deep);border-color:var(--deep);color:var(--on-deep)}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.slots button{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:13px 0;font-weight:600;font-variant-numeric:tabular-nums}
+.slots button[aria-pressed=true]{background:var(--teal-fill);color:var(--on-teal);border-color:var(--teal-fill)}
+.days{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.days button{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:10px 0;text-align:center;line-height:1.25;font-size:13px}
+.days button b{display:block;font-family:var(--font-d);font-size:20px}
+.days button[aria-pressed=true]{background:var(--deep);color:var(--on-deep);border-color:var(--deep)}
+.steps{display:flex;gap:6px;align-items:center}
+.steps i{flex:1;height:6px;border-radius:9px;background:var(--line)}.steps i.on{background:var(--teal-fill)}
+.steps span{font-size:13px;color:var(--muted);font-weight:600}
+.sum{display:flex;justify-content:space-between;gap:12px;font-size:15px}
+.sum b{text-align:right}
+hr{border:0;border-top:1px dashed var(--line);width:100%;margin:0}
+.done{align-items:center;text-align:center;padding:28px 20px}
+.tick{width:72px;height:72px;border-radius:50%;background:var(--ok-bg);color:var(--ok);display:grid;place-items:center}
+.tick svg{width:36px;height:36px;stroke-width:2.6}
+
+/* follow-up */
+.ringrow{display:flex;gap:16px;align-items:center}
+.tl{display:flex;flex-direction:column;margin:0;padding:0;list-style:none}
+.tl li{display:flex;gap:12px;padding-bottom:16px;position:relative}
+.tl li::before{content:"";position:absolute;left:8px;top:20px;bottom:0;width:2px;background:var(--line)}
+.tl li:last-child{padding-bottom:0}.tl li:last-child::before{display:none}
+.dot{flex:none;width:18px;height:18px;border-radius:50%;background:var(--teal-fill);margin-top:2px;border:4px solid var(--soft)}
+.dot.next{background:var(--coral);border-color:var(--coral-bg)}
+svg text{fill:var(--muted);font-family:var(--font-b);font-size:11px}
+
+.plan{background:var(--deep);color:var(--on-deep);border-color:transparent}
+.plan .muted{color:var(--on-deep-muted)}
+.note{font-size:11.5px;color:var(--muted);text-align:center;padding:4px 20px}
+nav{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;border-top:1px solid var(--line);padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:var(--card)}
+nav button{background:transparent;border:0;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;color:var(--muted);font-weight:500;min-height:52px}
+nav button span.i{width:52px;height:30px;border-radius:99px;display:grid;place-items:center}
+nav button[aria-current=page]{color:var(--teal);font-weight:600}
+nav button[aria-current=page] span.i{background:var(--soft)}
+</style>
+</head>
+<body>
+<div class="phone" role="application" aria-label="Protótipo do aplicativo PAASD">
+  <header class="top" id="top"></header>
+  <div class="seg" id="who" role="group" aria-label="Paciente"></div>
+  <main id="view"></main>
+  <p class="note">Protótipo com dados de exemplo</p>
+  <nav id="nav" aria-label="Navegação principal"></nav>
+</div>
+
+<script>
+const P = {
+  carlos:{id:'carlos',nome:'Carlos',idade:46,ini:'C',cond:'Diabetes tipo 2 · pós-cirurgia no joelho',
+    prox:{prof:'Dra. Letícia Moraes',esp:'Fisioterapia',dia:'Qua, 18 nov',hora:'09:30',ini:'LM'},
+    ind:[['Glicemia em jejum','118 mg/dL','ok'],['Pressão','128/82','ok'],['Flexão do joelho','95°','ok'],['Sessões no mês','3 de 4','warn']],
+    plano:[3,4,'sessões de fisioterapia neste mês'],serie:[142,135,130,126,122,120,118],serieNome:'Glicemia em jejum (mg/dL)',
+    hist:[['Fisioterapia','Dra. Letícia Moraes','11 nov','Ganho de 10° na flexão. Manter exercícios diários.'],['Consulta clínica','Dr. Rafael Souza','28 out','Ajuste da dose de metformina. Retorno em 30 dias.'],['Enfermagem','Enf. Rosiane Alves','14 out','Curativo da cicatriz sem sinais de infecção.']]},
+  maria:{id:'maria',nome:'Dona Maria',idade:72,ini:'M',cond:'Hipertensão · mobilidade reduzida',
+    prox:{prof:'Enf. Rosiane Alves',esp:'Enfermagem',dia:'Sex, 20 nov',hora:'14:00',ini:'RA'},
+    ind:[['Pressão','134/84','warn'],['Peso','68,2 kg','ok'],['Medicação em dia','92%','ok'],['Quedas no mês','0','ok']],
+    plano:[2,3,'visitas de acompanhamento neste mês'],serie:[150,146,144,140,138,136,134],serieNome:'Pressão sistólica (mmHg)',
+    hist:[['Consulta clínica','Dr. Rafael Souza','6 nov','Pressão um pouco alta. Reduzir sal e rever horário do remédio.'],['Enfermagem','Enf. Rosiane Alves','23 out','Aferição e orientação sobre medicamentos.'],['Fisioterapia','Dra. Letícia Moraes','9 out','Treino de equilíbrio. Sem quedas desde então.']]}
+};
+const PROFS=[
+ {n:'Dr. Rafael Souza',e:'Clínica médica',r:'4,9',d:'6 anos de experiência',i:'RS',prox:'amanhã'},
+ {n:'Enf. Rosiane Alves',e:'Enfermagem',r:'4,8',d:'Curativos e aferições',i:'RA',prox:'hoje'},
+ {n:'Dra. Letícia Moraes',e:'Fisioterapia',r:'5,0',d:'Reabilitação e mobilidade',i:'LM',prox:'sexta'}];
+const ESPS=['Todas','Clínica médica','Enfermagem','Fisioterapia'];
+const DAYS=[['Qui','12'],['Sex','13'],['Sáb','14'],['Seg','16'],['Ter','17']];
+const SLOTS=['08:00','09:30','11:00','14:00','15:30','17:00'];
+const I=p=>`<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`;
+const ICON={
+ home:I('<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>'),
+ cal:I('<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/>'),
+ chart:I('<path d="M3 12h4l3-8 4 16 3-8h4"/>'),
+ fam:I('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14c2.6 0 4.5 1.8 4.5 4.5"/>'),
+ bell:I('<path d="M6 16V11a6 6 0 0112 0v5l2 2H4z"/><path d="M10 20a2 2 0 004 0"/>'),
+ clock:I('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+ pin:I('<path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>'),
+ check:I('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
+ plus:I('<path d="M12 5v14M5 12h14"/>')};
+const fresh=()=>({step:0,esp:'Todas',prof:null,dia:null,hora:null,done:false});
+let S={tab:'inicio',pac:'carlos',book:fresh(),agendados:[]};
+const $=s=>document.querySelector(s);
+const cur=()=>P[S.pac];
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function chrome(){
+  const p=cur();
+  $('#top').innerHTML=`<div class="me" aria-hidden="true">${p.ini}</div><div class="hello"><small>Olá,</small><b>${esc(p.nome)}</b></div><button class="bell" aria-label="Avisos: 1 novo">${ICON.bell}</button>`;
+  $('#who').innerHTML=Object.values(P).map(x=>`<button data-pac="${x.id}" aria-pressed="${x.id===S.pac}">${x.nome}, ${x.idade}</button>`).join('');
+  const tabs=[['inicio','Início','home'],['agendar','Agendar','cal'],['acompanhar','Acompanhar','chart'],['familia','Família','fam']];
+  $('#nav').innerHTML=tabs.map(t=>`<button data-tab="${t[0]}" ${S.tab===t[0]?'aria-current="page"':''}><span class="i">${ICON[t[2]]}</span><span>${t[1]}</span></button>`).join('');
+}
+function chart(vals){
+  const w=300,h=110,min=Math.min(...vals)-4,max=Math.max(...vals)+4;
+  const x=i=>12+i*(w-24)/(vals.length-1), y=v=>10+(max-v)/(max-min)*(h-36);
+  const pts=vals.map((v,i)=>x(i).toFixed(1)+' '+y(v).toFixed(1));
+  const last=vals.length-1, base=h-22;
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="Evolução das últimas 7 medições, de ${vals[0]} para ${vals[last]}">
+    <line x1="12" x2="${w-12}" y1="${base}" y2="${base}" stroke="var(--line)"/>
+    <line x1="12" x2="${w-12}" y1="${(base+10)/2}" y2="${(base+10)/2}" stroke="var(--line)" stroke-dasharray="3 5"/>
+    <path d="M${pts.join(' L')} L${x(last)} ${base} L${x(0)} ${base} Z" fill="var(--soft)"/>
+    <path d="M${pts.join(' L')}" fill="none" stroke="var(--teal-fill)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${x(last)}" cy="${y(vals[last])}" r="6" fill="var(--coral)" stroke="var(--card)" stroke-width="2"/>
+    <text x="12" y="${h-4}">há 7 semanas</text><text x="${w-12}" y="${h-4}" text-anchor="end">hoje</text></svg>`;
+}
+function ring(a,b){
+  const r=30,c=2*Math.PI*r,f=c*a/b;
+  return `<svg viewBox="0 0 80 80" width="80" height="80" role="img" aria-label="${a} de ${b}"><circle cx="40" cy="40" r="${r}" fill="none" stroke="var(--soft)" stroke-width="9"/><circle cx="40" cy="40" r="${r}" fill="none" stroke="var(--teal-fill)" stroke-width="9" stroke-linecap="round" stroke-dasharray="${f.toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 40 40)"/><text x="40" y="45" text-anchor="middle" style="font-family:var(--font-d);font-size:18px;font-weight:700;fill:var(--ink)">${a}/${b}</text></svg>`;
+}
+function inicio(){
+  const p=cur(), n=p.prox;
+  const extra=S.agendados.filter(a=>a.pac===p.id).map(a=>`<div class="card"><div class="row"><div class="avatar">${a.ini}</div><div class="grow"><b>${esc(a.prof)}</b><p class="muted">${esc(a.esp)} · ${esc(a.dia)}, ${esc(a.hora)}</p></div><span class="chip">Confirmada</span></div></div>`).join('');
+  return `<section class="hero" aria-label="Próxima visita"><p class="lbl">Próxima visita em casa</p>
+    <div class="row"><div class="avatar">${n.ini}</div><div class="grow"><h2>${n.dia} · ${n.hora}</h2><p class="muted">${n.prof} · ${n.esp}</p></div></div>
+    <div class="btns"><button class="btn onhero" data-go="agendar">Remarcar</button><button class="btn coral" data-go="acompanhar">Ver plano</button></div></section>
+  <div class="quick">
+    <button data-go="agendar"><span class="i">${ICON.plus}</span>Agendar</button>
+    <button data-go="acompanhar"><span class="i">${ICON.chart}</span>Evolução</button>
+    <button data-go="acompanhar"><span class="i">${ICON.clock}</span>Histórico</button>
+    <button data-go="familia"><span class="i">${ICON.fam}</span>Família</button></div>
+  ${extra?`<h2>Também agendado</h2>${extra}`:''}
+  <div class="secthead"><h2>Seu acompanhamento</h2><button class="link" data-go="acompanhar">Ver tudo</button></div>
+  <div class="grid2">${p.ind.map(i=>`<div class="card stat"><span class="muted">${i[0]}</span><b>${i[1]}</b><span class="chip ${i[2]==='warn'?'warn':''}">${i[2]==='warn'?'Atenção':'Em meta'}</span></div>`).join('')}</div>
+  <div class="secthead"><h2>Profissionais em Campo Mourão</h2><button class="link" data-go="agendar">Agendar</button></div>
+  <div class="hscroll">${PROFS.map(f=>`<div class="card pro"><div class="avatar">${f.i}</div><b>${f.n}</b><span class="muted">${f.e}</span><span class="star">★ ${f.r}</span></div>`).join('')}</div>`;
+}
+function agendar(){
+  const b=S.book;
+  if(b.done){const pr=PROFS[b.prof];return `<div class="card done"><div class="tick">${ICON.check}</div><h1>Visita confirmada</h1><p class="muted">${DAYS[b.dia][0]}, ${DAYS[b.dia][1]}/11 às ${SLOTS[b.hora]}, na casa de ${esc(cur().nome)}</p></div>
+   <div class="card"><div class="row"><div class="avatar">${pr.i}</div><div class="grow"><b>${pr.n}</b><p class="muted">${pr.e} · ★ ${pr.r}</p></div></div></div>
+   <p class="muted">Você recebe um lembrete na véspera e acompanha o deslocamento do profissional no dia.</p>
+   <button class="btn" data-act="reset">Voltar ao início</button>`;}
+  const bar=`<div class="steps" aria-label="Passo ${b.step+1} de 3">${[0,1,2].map(i=>`<i class="${i<=b.step?'on':''}"></i>`).join('')}<span>${b.step+1}/3</span></div>`;
+  if(b.step===0){
+    const list=PROFS.map((p,i)=>[p,i]).filter(([p])=>b.esp==='Todas'||p.e===b.esp);
+    return `${bar}<div><h1>Quem vai até você?</h1><p class="muted">Paciente: ${esc(cur().nome)}</p></div>
+   <div class="filters" role="group" aria-label="Especialidade">${ESPS.map(e=>`<button data-esp="${e}" aria-pressed="${b.esp===e}">${e}</button>`).join('')}</div>
+   ${list.map(([p,i])=>`<button class="opt" data-prof="${i}" aria-pressed="${b.prof===i}"><div class="avatar">${p.i}</div><div class="grow"><b>${p.n}</b><p class="muted">${p.e} · ${p.d}</p><p class="star">★ ${p.r} <span class="muted">· próximo horário ${p.prox}</span></p></div><span class="radio"></span></button>`).join('')}
+   <button class="btn" data-act="next" ${b.prof===null?'disabled':''}>Continuar</button>`;}
+  if(b.step===1)return `${bar}<h1>Escolha dia e horário</h1>
+   <div><p class="muted" style="margin-bottom:8px">Novembro</p><div class="days" role="group" aria-label="Dia">${DAYS.map((d,i)=>`<button data-dia="${i}" aria-pressed="${b.dia===i}">${d[0]}<b>${d[1]}</b></button>`).join('')}</div></div>
+   <div><p class="muted" style="margin-bottom:8px">Horários livres</p><div class="slots" role="group" aria-label="Horário">${SLOTS.map((s,i)=>`<button data-hora="${i}" aria-pressed="${b.hora===i}">${s}</button>`).join('')}</div></div>
+   <div class="btns"><button class="btn ghost" data-act="back">Voltar</button><button class="btn" data-act="next" ${b.dia===null||b.hora===null?'disabled':''}>Continuar</button></div>`;
+  const pr=PROFS[b.prof];
+  return `${bar}<h1>Confirme a visita</h1>
+   <div class="card"><div class="row"><div class="avatar">${pr.i}</div><div class="grow"><b>${pr.n}</b><p class="muted">${pr.e} · ★ ${pr.r}</p></div></div><hr>
+   <div class="row">${ICON.cal}<span class="grow"><b>${DAYS[b.dia][0]}, ${DAYS[b.dia][1]}/11 às ${SLOTS[b.hora]}</b></span></div>
+   <div class="row">${ICON.pin}<span class="grow">Rua das Palmeiras, 240 · Campo Mourão</span></div>
+   <div class="row">${ICON.fam}<span class="grow">Paciente: ${esc(cur().nome)}</span></div></div>
+   <div class="card"><div class="sum"><span>Visita domiciliar</span><b>R$ 250,00</b></div><hr><div class="sum"><span><b>Total</b></span><b>R$ 250,00</b></div><p class="muted">A comissão da plataforma já está incluída no valor.</p></div>
+   <div class="btns"><button class="btn ghost" data-act="back">Voltar</button><button class="btn" data-act="confirm">Confirmar visita</button></div>`;
+}
+function acompanhar(){
+  const p=cur();
+  return `<div><h1>Acompanhamento</h1><p class="muted">${esc(p.cond)}</p></div>
+  <div class="card"><div class="ringrow">${ring(p.plano[0],p.plano[1])}<div class="grow"><b>Plano do mês</b><p class="muted">${p.plano[0]} de ${p.plano[1]} ${p.plano[2]}</p></div></div></div>
+  <div class="card"><div class="secthead"><b>${p.serieNome}</b><span class="chip">Melhorando</span></div>${chart(p.serie)}<p class="muted">De ${p.serie[0]} para ${p.serie[6]} nas últimas 7 semanas</p></div>
+  <h2>Histórico de visitas</h2>
+  <div class="card"><ol class="tl"><li><span class="dot next"></span><div><b>${p.prox.esp} · ${p.prox.dia}</b><p class="muted">Agendada com ${p.prox.prof}</p></div></li>
+  ${p.hist.map(h=>`<li><span class="dot"></span><div><b>${h[0]} · ${h[2]}</b><p class="muted">${h[1]}</p><p style="font-size:14.5px">${h[3]}</p></div></li>`).join('')}</ol></div>`;
+}
+function familia(){
+  return `<div><h1>Família</h1><p class="muted">Quem você acompanha neste plano.</p></div>
+  ${Object.values(P).map(p=>`<div class="card"><div class="row"><div class="avatar">${p.ini}</div><div class="grow"><b>${p.nome}, ${p.idade} anos</b><p class="muted">${p.cond}</p></div></div>
+   <div class="row muted">${ICON.cal}<span class="grow">Próxima visita: ${p.prox.dia}, ${p.prox.hora}</span></div>
+   <div class="btns"><button class="btn ghost" data-pac="${p.id}" data-go="acompanhar">Prontuário</button><button class="btn" data-pac="${p.id}" data-go="agendar">Agendar</button></div></div>`).join('')}
+  <div class="card plan"><b>Plano de acompanhamento</b><p class="muted">4 visitas por ano por pessoa, com prioridade de agenda e histórico compartilhado entre os profissionais.</p>
+   <hr style="border-color:var(--deep-2)"><p class="muted">Ana (filha) está autorizada a ver a agenda e os resultados de Dona Maria.</p></div>`;
+}
+function render(){
+  chrome();
+  const v=$('#view');
+  v.innerHTML={inicio,agendar,acompanhar,familia}[S.tab]();
+  v.scrollTop=0;
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button'); if(!t)return;
+  const d=t.dataset; let touched=false;
+  if(d.pac){S.pac=d.pac;touched=true}
+  if(d.tab){S.tab=d.tab;if(d.tab==='agendar'&&S.book.done)S.book=fresh();touched=true}
+  if(d.go){S.tab=d.go;if(d.go==='agendar'&&S.book.done)S.book=fresh();touched=true}
+  if(d.esp){S.book.esp=d.esp;const p=PROFS[S.book.prof];if(p&&d.esp!=='Todas'&&p.e!==d.esp)S.book.prof=null;touched=true}
+  if(d.prof!==undefined){S.book.prof=+d.prof;touched=true}
+  if(d.dia!==undefined){S.book.dia=+d.dia;touched=true}
+  if(d.hora!==undefined){S.book.hora=+d.hora;touched=true}
+  if(d.act==='next'){S.book.step++;touched=true}
+  if(d.act==='back'){S.book.step--;touched=true}
+  if(d.act==='confirm'){const b=S.book,pr=PROFS[b.prof];S.agendados.push({pac:S.pac,prof:pr.n,esp:pr.e,dia:DAYS[b.dia][0]+', '+DAYS[b.dia][1]+'/11',hora:SLOTS[b.hora],ini:pr.i});b.done=true;touched=true}
+  if(d.act==='reset'){S.book=fresh();S.tab='inicio';touched=true}
+  if(touched)render();
+});
+render();
+</script>
+</body>
+</html>
